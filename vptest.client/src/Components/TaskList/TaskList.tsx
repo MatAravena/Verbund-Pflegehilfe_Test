@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { TaskModel } from '../../Types/Task';
 import { Button, Table, TableHead, TableBody, TableRow, TableCell, TableFooter, Checkbox, IconButton, Stack } from '@mui/material';
 import dayjs from 'dayjs';
@@ -8,70 +8,53 @@ import UpdateIcon from '@mui/icons-material/Update';
 interface TaskListProps {
     tasks: TaskModel[];
     onDeleteTask: (id: number) => void;
-    onUpdateTask: (task: TaskModel) => void;
+    onUpdateTask: (task: TaskModel, saveInBD?:boolean) => void;
 }
 
-type taskStates = 'All' | 'Active' | 'Completed'
+type TaskFilter = 'All' | 'Active' | 'Completed'
 
-const TaskList: React.FC<TaskListProps> = (props: TaskListProps) => {
-    const { tasks, onDeleteTask, onUpdateTask } = props;
-    const [listTasks, setListTasks] = useState<TaskModel[]>([]);
-    const [filter, setFilter] = useState<taskStates>('All');
+const TaskList: React.FC<TaskListProps> = ({ tasks, onDeleteTask, onUpdateTask }) => {
+    //const [listTasks, setListTasks] = useState<TaskModel[]>([]);
+    const [filter, setFilter] = useState<TaskFilter>('All');
+    const today = dayjs();
 
-    const today: Date = new Date(Date.now());
 
-    useEffect(() => {
-
-        const fetchTasks = async () => {
-            setListTasks(tasks)
-            handleFilterChange(filter);
-        };
-
-        fetchTasks();
+    const sortedTasks = useMemo(() => {
+        return [...tasks].sort((a, b) => dayjs(a.deadline).diff(dayjs(b.deadline)));
     }, [tasks]);
 
-    const sortListTasks = (): TaskModel[] => {
-        return listTasks.sort((a: TaskModel, b: TaskModel) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
-    }
-
-    const handleFilterChange = (filterValue: taskStates) => {
-        setFilter(filterValue);
-
-        switch (filterValue) {
-            case 'Completed':
-                setListTasks(tasks.filter(task => task.isDone));
-                break;
-            case 'Active':
-                setListTasks(tasks.filter(task => !task.isDone));
-                break;
-            default:
-                setListTasks(tasks);
-                break;
-        }
+    const handleFilterChange = (newFilter: TaskFilter) => {
+        setFilter(newFilter);
     };
 
-    const handleCheckStatus = (_task: TaskModel) => {
-        var taskUpdated = listTasks.find(t => t.id == _task.id)
-
-        if (taskUpdated == undefined) return;
-
-        taskUpdated.isDone = !taskUpdated?.isDone
-        setListTasks([...listTasks as TaskModel[]])
+    const filteredTasks = useMemo(() => {
+        switch (filter) {
+            case 'Completed':
+                return sortedTasks.filter(task => task.isDone);
+            case 'Active':
+                return sortedTasks.filter(task => !task.isDone);
+            default:
+                return sortedTasks;
+        }
+    }, [filter, sortedTasks]);
+ 
+    const handleCheckStatus = (task: TaskModel) => {
+        onUpdateTask({ ...task, isDone: !task.isDone }, false);
     };
 
     const formatDate = (dateStr: Date | undefined): string => {
-        return dayjs(dateStr).format('dddd DD, MMMM, YYYY');
+        return dayjs(dateStr).isValid() ? dayjs(dateStr).format('DD-MM-YYYY') : 'No Deadline';
     };
 
-    const displayButton = (filterStatus: string) => { return filter === filterStatus ? 'contained' : 'outlined' }
+    const displayButton = (filterStatus: TaskFilter) => filter === filterStatus ? 'contained' : 'outlined';
 
     const paintRows = (task: TaskModel): React.CSSProperties => {
-        if (task.isDone || dayjs(task.deadline) > dayjs(today)) return {}
+        if (task.isDone || dayjs(task.deadline).isAfter(today)) return {};
         return {
             border: 'groove red',
             borderRadius: '1px'
         }
-    }
+    };
 
     return (
         <Table size="medium">
@@ -84,7 +67,7 @@ const TaskList: React.FC<TaskListProps> = (props: TaskListProps) => {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {sortListTasks().map(task => (
+                {filteredTasks.map(task => (
                     <TableRow key={task.id} style={paintRows(task)}>
                         <TableCell>{task.description}</TableCell>
                         <TableCell>{formatDate(task.deadline)}</TableCell>
@@ -100,7 +83,7 @@ const TaskList: React.FC<TaskListProps> = (props: TaskListProps) => {
                                 <IconButton aria-label="delete" title="Delete" onClick={() => onDeleteTask(task.id)}>
                                     <DeleteIcon />
                                 </IconButton>
-                                <IconButton aria-label="update" title="Update" onClick={() => onUpdateTask(task)}>
+                                <IconButton aria-label="update" title="Update" onClick={() => onUpdateTask(task, true)}>
                                     <UpdateIcon />
                                 </IconButton>
                             </Stack>

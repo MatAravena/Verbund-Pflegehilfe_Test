@@ -71,8 +71,14 @@ function App() {
         }
     };
 
-    const handleUpdateTasks = async (task: TaskModel) => {
+    const handleUpdateTasks = async (task: TaskModel, toSaveInBD: boolean = true) => {
         try {
+            // If not saving to the backend, only update the state
+            if (!toSaveInBD) {
+                setListTasks(prevTasks => prevTasks.map(t => (t.id === task.id ? task : t)));
+                return;
+            }
+
             const result = await updateTask(task);
 
             if ((result as ErrorType)?.error) {
@@ -99,7 +105,7 @@ function App() {
         : listTasks.length > 0 ?
             <TaskList tasks={listTasks} onDeleteTask={handleDeleteTasks} onUpdateTask={handleUpdateTasks} />
             : <p><em>No tasks available.</em></p>;
-            
+
     const displayError = error ? <p><br />{error}<br /></p> : <></>
 
     //Return HTML
