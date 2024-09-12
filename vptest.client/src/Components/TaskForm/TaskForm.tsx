@@ -62,7 +62,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
         >
             <TextField
                 required
-                error={error.length > 0}
+                error={!!error}
                 helperText={error || ''}
                 size="medium"
                 type="text"
