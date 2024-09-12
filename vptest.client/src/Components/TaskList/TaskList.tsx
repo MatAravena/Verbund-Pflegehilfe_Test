@@ -8,7 +8,7 @@ import UpdateIcon from '@mui/icons-material/Update';
 interface TaskListProps {
     tasks: TaskModel[];
     onDeleteTask: (id: number) => void;
-    onUpdateTask: (task: TaskModel, saveInBD?:boolean) => void;
+    onUpdateTask: (task: TaskModel, saveInBD?: boolean) => void;
 }
 
 type TaskFilter = 'All' | 'Active' | 'Completed'
@@ -37,7 +37,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onDeleteTask, onUpdateTask }
                 return sortedTasks;
         }
     }, [filter, sortedTasks]);
- 
+
     const handleCheckStatus = (task: TaskModel) => {
         onUpdateTask({ ...task, isDone: !task.isDone }, false);
     };
@@ -51,8 +51,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onDeleteTask, onUpdateTask }
     const paintRows = (task: TaskModel): React.CSSProperties => {
         if (task.isDone || dayjs(task.deadline).isAfter(today)) return {};
         return {
-            border: 'groove red',
-            borderRadius: '1px'
+            border: '2px groove red',
         }
     };
 
