@@ -10,33 +10,39 @@ interface TaskFormProps {
 }
 
 const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
-    const today: Date = new Date(Date.now());
-
+    const today = dayjs();
     const [description, setDescription] = useState('');
     const [deadline, setDeadline] = React.useState<Dayjs | null>(dayjs(today));
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (description.length < 11) {
             setError('tasks must be longer than 10 .');
             return;
         }
-        setError('')
 
-        const result = onAddTask({
+        setError('')
+        setIsSubmitting(true);
+
+        const result = await onAddTask({
             id: 0,
             description: description,
-            deadline: dayjs(deadline?.toDate()).toDate(),
+            deadline: deadline?.toDate() ?? new Date(),
             isDone: false
         });
 
-        if (!result) return;
+        if (!result) {
+            setError('Failed to add the task. Please try again.');
+            setIsSubmitting(false);
+            return;
+        }
 
         setDescription('');
-        setDeadline(deadline);
-        setError('');
+        setDeadline(today);
+        setIsSubmitting(false);
     };
 
     return (
@@ -57,7 +63,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
             <TextField
                 required
                 error={error.length > 0}
-                helperText={error}
+                helperText={error || ''}
                 size="medium"
                 type="text"
                 value={description}
@@ -70,7 +76,12 @@ const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
                 format={"DD/MM/YYYY"}
                 onChange={(newValue) => setDeadline(newValue)}
             />
-            <Button type="submit" onClick={handleSubmit}>Add Task</Button>
+            <Button
+                type="submit"
+                variant="contained"
+                onClick={handleSubmit}>
+                {isSubmitting ? 'Adding...' : 'Add Task'}
+            </Button>
         </Box>
     );
 };
