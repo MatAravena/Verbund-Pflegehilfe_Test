@@ -69,17 +69,20 @@ const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Task description"
+                disabled={isSubmitting}
             />
             <DatePicker
                 label="DeadLine"
                 value={deadline}
                 format={"DD/MM/YYYY"}
+                disabled={isSubmitting}
                 onChange={(newValue) => setDeadline(newValue)}
             />
             <Button
                 type="submit"
                 variant="contained"
                 onClick={handleSubmit}>
+                disabled={isSubmitting}
                 {isSubmitting ? 'Adding...' : 'Add Task'}
             </Button>
         </Box>
