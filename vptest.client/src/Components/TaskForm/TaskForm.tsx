@@ -81,8 +81,8 @@ const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
             <Button
                 type="submit"
                 variant="contained"
-                onClick={handleSubmit}>
                 disabled={isSubmitting}
+                onClick={handleSubmit}>
                 {isSubmitting ? 'Adding...' : 'Add Task'}
             </Button>
         </Box>
