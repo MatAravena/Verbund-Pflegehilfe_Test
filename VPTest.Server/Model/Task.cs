@@ -1,10 +1,10 @@
-﻿namespace VPTest.Server.Data
+﻿namespace VPTest.Server.Model
 {
     public class TaskModel
     {
         public int Id { get; set; }
         public string? Description { get; set; }
-        public DateTime? Deadline { get; set; }
+        public DateTime Deadline { get; set; }
         public bool IsDone { get; set; }
 
         public TaskModel()
@@ -22,5 +22,3 @@
         }
     }
 }
-
-

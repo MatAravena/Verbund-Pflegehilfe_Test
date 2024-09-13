@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
+using VPTest.Server.Model;
 
 namespace VPTest.Server.Data
 {

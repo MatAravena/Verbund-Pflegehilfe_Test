@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using VPTest.Server.Model;
 
 namespace VPTest.Server.Data
 {
@@ -8,6 +9,6 @@ namespace VPTest.Server.Data
         public TasksDbContext(DbContextOptions<TasksDbContext> options)
        : base(options) { }
 
-        public DbSet<Data.TaskModel> TasksModels { get; set; }
+        public DbSet<TaskModel> TasksModels { get; set; }
     }
 }
