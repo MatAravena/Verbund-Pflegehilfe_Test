@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using VPTest.Server.Data;
+using VPTest.Server.Implementation;
+using VPTest.Server.Interfaces; 
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -43,6 +45,9 @@ builder.Services.AddCors(options =>
                                                 "https://localhost:5173/");
                         });
 });
+
+// Other service registrations
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
 var app = builder.Build();
 

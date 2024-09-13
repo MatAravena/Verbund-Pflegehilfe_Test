@@ -1,12 +1,13 @@
-﻿using VPTest.Server.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using VPTest.Server.Model;
 
 namespace VPTest.Server.Interfaces
 {
     public interface ITaskRepository
     {
-        Task<IEnumerable<TaskModel>> GetTasks();
-        Task<TaskModel> AddTask(TaskModel task);
-        Task<bool> UpdateTask(TaskModel task);
-        Task<bool> DeleteTask(int id);
+        Task<IEnumerable<TaskDTO>> GetAllTasksAsync();
+        Task<TaskDTO> CreateTaskAsync(TaskDTO task);
+        Task<bool> UpdateTaskAsync(TaskDTO task);
+        Task<bool> DeleteTaskAsync(int id);
     }
 }
