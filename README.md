@@ -1,11 +1,13 @@
 # Code test for Verbund Pflegehilfe
 
-
+Tech used <br/>
+BE -> C# .Net 6.0 <br/>
+FE -> React - Typescript <br/>
 
 
 ## Requirements
 
-The task: It should be a ToDo app in ReactJS with Typescript and C#.
+The task: It should be a ToDo app.
 
 Task description:
 <ul>
