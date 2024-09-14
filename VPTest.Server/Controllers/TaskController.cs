@@ -31,8 +31,8 @@ namespace VPTest.Server.Controllers
         [HttpPut(Name = "UpdateTask")]
         public async Task<IActionResult> UpdateTask(TaskDTO task)
         {
-            var success = await _taskRepository.UpdateTaskAsync(task);
-            if (!success)
+            var isUpdated = await _taskRepository.UpdateTaskAsync(task);
+            if (!isUpdated)
                 return NotFound(new { Message = "Task not found." });
 
             return NoContent();
@@ -41,8 +41,8 @@ namespace VPTest.Server.Controllers
         [HttpDelete(Name = "DeleteTask")]
         public async Task<IActionResult> DeleteTask(int id)
         {
-            var success = await _taskRepository.DeleteTaskAsync(id);
-            if (!success)
+            var isDeleted = await _taskRepository.DeleteTaskAsync(id);
+            if (!isDeleted)
                 return NotFound(new { Message = "Task not found." });
 
             return NoContent();
