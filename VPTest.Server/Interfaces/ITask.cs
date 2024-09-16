@@ -3,7 +3,7 @@ using VPTest.Server.Model;
 
 namespace VPTest.Server.Interfaces
 {
-    public interface ITaskRepository
+    public interface ITask
     {
         Task<IEnumerable<TaskDTO>> GetAllTasksAsync();
         Task<TaskDTO> CreateTaskAsync(TaskDTO task);

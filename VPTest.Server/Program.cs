@@ -47,7 +47,7 @@ builder.Services.AddCors(options =>
 });
 
 // Other service registrations
-builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<ITask, TaskRepository>();
 
 var app = builder.Build();
 

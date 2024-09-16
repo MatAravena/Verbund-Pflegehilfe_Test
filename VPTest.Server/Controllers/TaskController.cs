@@ -7,9 +7,9 @@ namespace VPTest.Server.Controllers
     [Route("api/[controller]")]
     public class TaskController : ControllerBase
     {
-        private readonly ITaskRepository _taskRepository;
+        private readonly ITask _taskRepository;
 
-        public TaskController(ITaskRepository taskRepository)
+        public TaskController(ITask taskRepository)
         {
             _taskRepository = taskRepository;
         }

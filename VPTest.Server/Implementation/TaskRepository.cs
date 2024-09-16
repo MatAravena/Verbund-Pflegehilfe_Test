@@ -6,11 +6,11 @@ using VPTest.Server.Model;
 
 namespace VPTest.Server.Implementation
 {
-    public class TaskRepository: ITaskRepository
+    public class TaskRepository: GenericRepository<TaskModel>, ITask
     {
         private readonly TasksDbContext _context;
 
-        public TaskRepository(TasksDbContext context)
+        public TaskRepository(TasksDbContext context) : base(context)
         {
             _context = context;
         }
@@ -23,12 +23,14 @@ namespace VPTest.Server.Implementation
 
         public async Task<TaskDTO> CreateTaskAsync(TaskDTO task)
         {
-            task.Id = _context.TasksModels.Any() ? _context.TasksModels.Max(x => x.Id) + 1 : 1;
-            var newTask = TaskModel.createNewTask(task.Id, task.Description, task.Deadline, task.IsDone);
+            //task.Id = _context.TasksModels.Any() ? _context.TasksModels.Max(x => x.Id) + 1 : 1;
+            //var newTask = TaskModel.createNewTask(task.Id, task.Description, task.Deadline, task.IsDone);
+            //_context.TasksModels.Add(newTask);
+            //await _context.SaveChangesAsync();
+            //return task;
 
-            _context.TasksModels.Add(newTask);
-            await _context.SaveChangesAsync();
-
+            TaskModel newTask = TaskModel.createNewTask(task.Id, task.Description, task.Deadline, task.IsDone);
+            await AddAsync(newTask);
             return task;
         }
 
@@ -54,5 +56,6 @@ namespace VPTest.Server.Implementation
             await _context.SaveChangesAsync();
             return true;
         }
+
     }
 }
