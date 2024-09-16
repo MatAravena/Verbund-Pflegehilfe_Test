@@ -1,4 +1,4 @@
-using VPTest.Server
+using VPTest.Server;
 
 namespace VPTesting
 {
