@@ -20,7 +20,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
         e.preventDefault();
 
         if (description.length < 11) {
-            setError('tasks must be longer than 10 .');
+            setError('tasks must be longer than 10.');
             return;
         }
 
