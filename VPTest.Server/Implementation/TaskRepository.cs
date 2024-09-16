@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using VPTest.Server.Data;
 using VPTest.Server.Interfaces;
 using VPTest.Server.Model;

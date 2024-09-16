@@ -78,3 +78,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
+//in this way we exposed DB InMemory the solution for the testing project
+public partial class Program { }

@@ -9,6 +9,6 @@ namespace VPTest.Server.Data
         public TasksDbContext(DbContextOptions<TasksDbContext> options)
        : base(options) { }
 
-        public DbSet<TaskModel> TasksModels { get; set; }
+        public virtual DbSet<TaskModel> TasksModels { get; set; }
     }
 }
