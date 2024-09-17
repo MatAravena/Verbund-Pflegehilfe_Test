@@ -14,7 +14,6 @@ test.describe('App main component', () => {
 
         //mockApi
         await mockApi(page);
-
         await page.context().setDefaultNavigationTimeout(30000);
         //await page.context().newPage({ ignoreHTTPSErrors: true });
         await page.goto('https://localhost:5173/', { timeout: 600000 });
@@ -60,14 +59,15 @@ test.describe('App main component', () => {
         const tasksListed = page.locator('text=No tasks available.');
         await expect(tasksListed).toBeHidden();
 
+        const expectedTaskCount = 7;
         const firstRowCount = await page.getByRole('row').count();
-        expect(firstRowCount).toBe(7)
+        expect(firstRowCount).toBe(expectedTaskCount)
 
         const deleteButton = page.locator('button[data-testid="deleteButton5"]');
         await expect(deleteButton).toBeVisible();
         await deleteButton.click();
 
         const finalCount = await page.getByRole('row').count();
-        expect(finalCount).toBe(6)
+        expect(finalCount).toBe(expectedTaskCount - 1)
     });
 });
