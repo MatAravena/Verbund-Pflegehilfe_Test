@@ -5,29 +5,32 @@ test.describe('App main component', () => {
 
     test.beforeEach(async ({ page }) => {
 
+        // Allow consoleLog messages in browser
+        page.on('console', msg => {
+            if (msg.type() === 'log') {
+                console.log(`Browser console log: ${msg.text()}`);
+            }
+        });
+
         //mockApi
         await mockApi(page);
 
-
-        await page.context().setDefaultNavigationTimeout(30000); 
-
+        await page.context().setDefaultNavigationTimeout(30000);
         //await page.context().newPage({ ignoreHTTPSErrors: true });
-        //await page.goto('https://localhost:5173/', { timeout: 600000 });
-
         await page.goto('https://localhost:5173/', { timeout: 600000 });
-
     });
 
     test('Simple ToDos title and list tasks', async ({ page }) => {
         const title = page.locator('text=List of ToDos');
         await expect(title).toBeVisible();
 
+        const tasksListed = page.locator('text=No tasks available.');
+        await expect(tasksListed).toBeHidden();
     });
 
     test('Task too short', async ({ page }) => {
 
         await page.fill('input[placeholder="Task description"]', 'ShorTask');
-        //await page.pause();
 
         await page.click('button:has-text("Add Task")');
 
@@ -36,7 +39,6 @@ test.describe('App main component', () => {
     });
 
     test('should add a task successfully', async ({ page }) => {
-
         const tasksListed = page.locator('text=No tasks available.');
         await expect(tasksListed).toBeHidden();
 
@@ -45,10 +47,27 @@ test.describe('App main component', () => {
 
         //Input should be empty after
         const descriptionValue = await page.inputValue('input[placeholder="Task description"]');
-        await page.pause();
         expect(descriptionValue).toBe('');
 
-        const task = page.locator('text=This is a valid task description.');
-        expect(task).toBeVisible();
+        //const task = page.locator('td=This is a valid task description.');
+        // const newTask = await page.locator('.MuiTableRow-root').nth(5)// .toContainText('This is a valid task description.');
+        const newTask = await page.locator('.MuiTableRow-root >> text=This is a valid task description.');
+        // await page.pause();
+        await expect(newTask).toBeVisible();
+    });
+
+    test('should delete a task successfully', async ({ page }) => {
+        const tasksListed = page.locator('text=No tasks available.');
+        await expect(tasksListed).toBeHidden();
+
+        const firstRowCount = await page.getByRole('row').count();
+        expect(firstRowCount).toBe(7)
+
+        const deleteButton = page.locator('button[data-testid="deleteButton5"]');
+        await expect(deleteButton).toBeVisible();
+        await deleteButton.click();
+
+        const finalCount = await page.getByRole('row').count();
+        expect(finalCount).toBe(6)
     });
 });

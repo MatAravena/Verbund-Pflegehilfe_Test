@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test';
 
 export async function mockApi(page: Page) {
+
     await page.route('**/api/task', async (route) => {
         switch (route.request().method()) {
             case 'GET':
@@ -22,8 +23,8 @@ export async function mockApi(page: Page) {
                     headers: { 'Content-Type': 'application/json' }
                 });
                 break;
+            //case 'DELETE':
             case 'PUT':
-            case 'DELETE':
                 route.fulfill({
                     status: 200,
                     body: JSON.stringify({ success: true }),
@@ -31,6 +32,23 @@ export async function mockApi(page: Page) {
                 });
                 break;
             default:
+        }
+    });
+
+    await page.route('**/api/task?id=*', async (route) => {
+        if (route.request().method() === 'DELETE') {
+            // Extract the ID from the URL
+            const url = new URL(route.request().url());
+            const id = url.searchParams.get('id');
+
+            // Mock success response
+            if (id) {
+                route.fulfill({
+                    status: 200,
+                    body: JSON.stringify({ success: true }),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            }
         }
     });
 }

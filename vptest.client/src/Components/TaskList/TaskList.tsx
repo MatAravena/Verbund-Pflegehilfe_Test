@@ -79,7 +79,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onDeleteTask, onUpdateTask }
                         </TableCell>
                         <TableCell>
                             <Stack direction="row" spacing={1}>
-                                <IconButton aria-label="delete" title="Delete" onClick={() => onDeleteTask(task.id)}>
+                                <IconButton data-testid={'deleteButton' + task.id} aria-label="delete" title="Delete" onClick={() => onDeleteTask(task.id)}>
                                     <DeleteIcon />
                                 </IconButton>
                                 <IconButton aria-label="update" title="Update" onClick={() => onUpdateTask(task, true)}>
