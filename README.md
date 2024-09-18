@@ -1,7 +1,7 @@
 # Code test for Verbund Pflegehilfe
 
 Tech used <br/>
-BE -> C# .Net 6.0 <br/>
+BE -> C# .Net 8.0 <br/>
 FE -> React - Typescript <br/>
 
 
